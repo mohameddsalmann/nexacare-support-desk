@@ -1,24 +1,48 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AppHeader } from "@/components/AppHeader";
+import { ChatShell } from "@/components/chat/ChatShell";
+import { SessionPanel } from "@/components/session/SessionPanel";
+import { useConversation } from "@/hooks/useConversation";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const title = "NexaCare AI Support — Conversational AI demo";
+const description =
+  "A TP-style enterprise customer support assistant demo: live conversation panel with session intelligence, flows, collected context and human handoff.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const { messages, session, typing, send, retry } = useConversation();
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <AppHeader />
+      <main className="mx-auto grid max-w-[1400px] grid-cols-1 gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_minmax(300px,33%)] lg:py-8">
+        <ChatShell
+          conversationId={session.conversationId}
+          messages={messages}
+          typing={typing}
+          onSend={send}
+          onRetry={retry}
+        />
+        <SessionPanel session={session} />
+      </main>
+      <footer className="border-t border-line">
+        <div className="mx-auto max-w-[1400px] px-4 py-5 text-xs text-muted-foreground sm:px-6">
+          Fictional demo application. All customer data shown is sample data.
+        </div>
+      </footer>
     </div>
   );
 }
