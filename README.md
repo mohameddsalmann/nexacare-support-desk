@@ -1,29 +1,34 @@
-# Welcome to your Lovable project
+# NexaCare AI Support — Frontend
 
-This project was built with [Lovable](https://lovable.dev).
+Frontend-only conversational AI support interface. The backend (Rasa CALM / FastAPI) lives outside this project.
 
-## Build with Lovable
+## Installation
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+```bash
+bun install
+```
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+```bash
+bun run dev
 ```
 
-## Built with
+## Production build
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+```bash
+bun run build
+```
+
+## Environment variable
+
+```
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+When unset, the UI runs on the local demo adapter in `src/services/mockChatAdapter.ts`.
+
+## Backend API contract
+
+TypeScript interfaces: `src/types/conversation.ts`
+HTTP client: `src/services/chatApi.ts` (`POST {VITE_API_BASE_URL}/api/chat`)
